@@ -36,7 +36,6 @@
   .muted{color:var(--muted);font-size:.9rem;}
   .tagline{color:#d6dcff;font-size:.96rem;}
 
-  /* Botones modo */
   .mode-switch{
     display:flex;
     flex-wrap:wrap;
@@ -74,7 +73,6 @@
   }
   .mode-btn[data-mode="trenes"].active span.dot{background:var(--accent-tren);}
 
-  /* Grids */
   .grid{display:grid;gap:14px;}
   @media(min-width:880px){.grid-2{grid-template-columns:1.4fr 1fr;}}
   @media(min-width:950px){.grid-3{grid-template-columns:repeat(3,1fr);}}
@@ -106,7 +104,6 @@
     color:var(--muted);
   }
 
-  /* Tabla */
   table{
     width:100%;
     border-collapse:collapse;
@@ -137,7 +134,6 @@
   .badge-london{border-color:#7f8cff;color:#cdd2ff;}
   .badge-route{border-color:#6fc5a6;color:#c9f7e5;}
 
-  /* City cards */
   .city-grid{display:grid;gap:14px;}
   @media(min-width:840px){.city-grid{grid-template-columns:repeat(2,1fr);}}
   @media(min-width:1040px){.city-grid{grid-template-columns:repeat(3,1fr);}}
@@ -179,8 +175,8 @@
   <div class="container">
     <h1>Viaje de Invierno – Bélgica, Holanda y París</h1>
     <p class="tagline">
-      Pensado para <strong>4 adultos + 1 bebé</strong>, con alojamiento ya cubierto.  
-      Seleccioná arriba el tipo de viaje para ver los costos actualizados.
+      4 adultos + 1 bebé · Alojamiento ya cubierto · Presupuesto fuerte de la pareja que viene de Buenos Aires.  
+      Los valores son <strong>estimados en USD por pareja</strong>.
     </p>
   </div>
 </header>
@@ -190,7 +186,7 @@
   <!-- SELECTOR -->
   <section>
     <h2>Elegí el tipo de viaje</h2>
-    <p class="muted">Cada opción recalcula los costos automáticamente.</p>
+    <p class="muted">Mismo itinerario, cambia cómo se mueven y cuánto gastan en transporte.</p>
 
     <div class="mode-switch">
       <button class="mode-btn" data-mode="auto"><span class="dot"></span> 🚗 Solo auto</button>
@@ -204,32 +200,85 @@
       <div class="card">
         <span class="pill">✈️ Vuelos</span>
         <div class="summary-number" id="sumFlights">–</div>
-        <div class="summary-label">BsAs ⇄ Londres (ya pagados)</div>
+        <div class="summary-label">BsAs ⇄ Londres (ya pagados).</div>
       </div>
       <div class="card">
         <span class="pill">🇬🇧 Londres (7 días)</span>
         <div class="summary-number" id="sumLondon">–</div>
-        <div class="summary-label">Comidas + transporte + actividades</div>
+        <div class="summary-label">Comidas + transporte + actividades (sin hotel).</div>
       </div>
       <div class="card">
         <span class="pill">🌍 Ruta Europa (12 días)</span>
         <div class="summary-number" id="sumRoute">–</div>
-        <div class="summary-label">Depende del tipo de viaje</div>
+        <div class="summary-label">Transporte + comidas + ocio en Bélgica, París y Holanda.</div>
       </div>
     </div>
 
     <div class="card" style="margin-top:14px;">
       <span class="pill" id="pillMode">Tipo de viaje seleccionado</span>
       <div class="summary-number" id="sumTotal">–</div>
-      <div class="summary-label">Total viaje completo</div>
+      <div class="summary-label">Total estimado para la pareja (vuelos + Londres + ruta completa).</div>
       <p class="muted" id="modeNote"></p>
     </div>
   </section>
 
-  <!-- TABLA -->
+  <!-- EXPLICACIÓN COSTES TRANSPORTE -->
+  <section>
+    <h2>Cómo se calculan los costes de transporte (aprox.)</h2>
+    <p class="muted">
+      Cálculo aproximado para una <strong>pareja</strong>, suponiendo una SUV tipo Tiguan compartida entre 2 parejas.
+    </p>
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Modo</th>
+            <th>Componentes</th>
+            <th>Total transporte ruta (12 días)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🚗 Solo auto</td>
+            <td>
+              • Alquiler SUV (compartido): ≈ 600 USD<br>
+              • Combustible (≈ 2.240 km): ≈ 250 USD<br>
+              • Peajes + parking ciudades: ≈ 300 USD
+            </td>
+            <td><strong>≈ 1.150 USD</strong></td>
+          </tr>
+          <tr>
+            <td>🔁 Híbrido</td>
+            <td>
+              • Eurostar Londres ⇄ Bruselas: ≈ 350 USD<br>
+              • Alquiler SUV (menos días): ≈ 350 USD<br>
+              • Combustible: ≈ 150 USD<br>
+              • Peajes + parking: ≈ 100 USD
+            </td>
+            <td><strong>≈ 950 USD</strong></td>
+          </tr>
+          <tr>
+            <td>🚆 Solo trenes</td>
+            <td>
+              • Eurostar Londres ⇄ Bruselas: ≈ 350 USD<br>
+              • Trenes Bélgica, Francia, Holanda: ≈ 950 USD
+            </td>
+            <td><strong>≈ 1.300 USD</strong></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="muted">
+        Estos totales de transporte se reparten en la tabla día por día para mostrar un coste medio diario según el modo elegido.
+      </p>
+    </div>
+  </section>
+
+  <!-- TABLA DÍA A DÍA -->
   <section>
     <h2>Tabla del viaje día por día</h2>
-    <p class="muted">El itinerario es fijo, los costos cambian según el modo de transporte.</p>
+    <p class="muted">
+      Itinerario fijo de 19 días (7 Londres + 12 de ruta). Los costes "Base" son comidas+ocio; el "Transporte día" cambia según la opción elegida arriba.
+    </p>
 
     <div class="card">
       <table>
@@ -242,7 +291,7 @@
             <th>Transporte</th>
             <th>Base</th>
             <th>Transporte día</th>
-            <th>Total Día</th>
+            <th>Total día</th>
           </tr>
         </thead>
         <tbody id="tbodyDays"></tbody>
@@ -250,132 +299,140 @@
     </div>
   </section>
 
-  <!-- IMÁGENES ACESIBLES -->
+  <!-- ITINERARIO VISUAL -->
   <section>
-    <h2>Itinerario visual (imágenes accesibles)</h2>
-    <p class="muted">Todas las imágenes provienen de Unsplash Source (siempre disponibles).</p>
+    <h2>Itinerario visual (fotos fijas)</h2>
+    <p class="muted">Imágenes con URLs directas de Unsplash, no se rompen ni requieren subir archivos.</p>
 
     <div class="city-grid">
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?brussels,belgium" alt="Bruselas">
+        <img src="https://images.unsplash.com/photo-1583422409516-2895a0c67cf1?auto=format&fit=crop&w=900&q=80" alt="Bruselas" />
         <div class="city-body">
           <span class="day-tag">Día 1</span>
           <h3 class="city-title">Bruselas</h3>
-          <p class="muted">Base inicial, ciudad perfecta para invierno.</p>
+          <p class="muted">Base inicial, Grand Place y galerías cubiertas.</p>
         </div>
       </div>
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?bruges,belgium" alt="Brujas">
+        <img src="https://images.unsplash.com/photo-1504366260680-0be9c2c57f88?auto=format&fit=crop&w=900&q=80" alt="Brujas" />
         <div class="city-body">
           <span class="day-tag">Día 2</span>
           <h3 class="city-title">Brujas</h3>
-          <p class="muted">Postal medieval, canales y Markt.</p>
+          <p class="muted">Canales, Markt, ciudad medieval muy compacta.</p>
         </div>
       </div>
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?ghent,belgium" alt="Gante">
+        <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f55d?auto=format&fit=crop&w=900&q=80" alt="Gante" />
         <div class="city-body">
           <span class="day-tag">Día 3</span>
           <h3 class="city-title">Gante</h3>
-          <p class="muted">Castillo de los Condes y Graslei.</p>
+          <p class="muted">Castillo de los Condes y zona Graslei/Korenlei.</p>
         </div>
       </div>
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?antwerp,belgium" alt="Amberes">
+        <img src="https://images.unsplash.com/photo-1544986581-efac024faf62?auto=format&fit=crop&w=900&q=80" alt="Amberes" />
         <div class="city-body">
           <span class="day-tag">Día 4</span>
           <h3 class="city-title">Amberes</h3>
-          <p class="muted">Moda, cafés y arquitectura.</p>
+          <p class="muted">Moda, cafés, catedral y Grote Markt.</p>
         </div>
       </div>
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?namur,belgium" alt="Namur">
+        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80" alt="Namur" />
         <div class="city-body">
           <span class="day-tag">Día 5</span>
           <h3 class="city-title">Namur</h3>
-          <p class="muted">Ciudadela y vistas al Mosa.</p>
+          <p class="muted">Ciudadela y vistas al río, día más tranquilo.</p>
         </div>
       </div>
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?dinant,belgium" alt="Dinant">
+        <img src="https://images.unsplash.com/photo-1566217633837-d78a38fecec6?auto=format&fit=crop&w=900&q=80" alt="Dinant" />
         <div class="city-body">
           <span class="day-tag">Día 6</span>
           <h3 class="city-title">Dinant</h3>
-          <p class="muted">Río, iglesia negra y fortaleza.</p>
+          <p class="muted">Postal del río Mosa, fortaleza e iglesia.</p>
         </div>
       </div>
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?paris,france" alt="París">
+        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=900&q=80" alt="París" />
         <div class="city-body">
-          <span class="day-tag">Día 7–9</span>
+          <span class="day-tag">Días 7–9</span>
           <h3 class="city-title">París</h3>
-          <p class="muted">Museos, cafés y paseos clásicos.</p>
+          <p class="muted">Museos, cafés, Sena y paseo clásico de ciudad grande.</p>
         </div>
       </div>
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?haarlem,netherlands" alt="Haarlem">
+        <img src="https://images.unsplash.com/photo-1562687435-b298d1dc1c5c?auto=format&fit=crop&w=900&q=80" alt="Haarlem" />
         <div class="city-body">
           <span class="day-tag">Día 10</span>
           <h3 class="city-title">Haarlem</h3>
-          <p class="muted">Mini Ámsterdam tranquila.</p>
+          <p class="muted">Mini Ámsterdam tranquila, perfecta con bebé.</p>
         </div>
       </div>
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?amsterdam,netherlands" alt="Ámsterdam">
+        <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?auto=format&fit=crop&w=900&q=80" alt="Ámsterdam" />
         <div class="city-body">
           <span class="day-tag">Día 11</span>
           <h3 class="city-title">Ámsterdam</h3>
-          <p class="muted">Canales, museos y barco cubierto.</p>
+          <p class="muted">Canales, barco cubierto y museos.</p>
         </div>
       </div>
 
       <div class="city-card">
-        <img src="https://source.unsplash.com/featured/?denbosch,netherlands" alt="Den Bosch">
+        <img src="https://images.unsplash.com/photo-1591896568105-70c2ee9d7cd2?auto=format&fit=crop&w=900&q=80" alt="Den Bosch" />
         <div class="city-body">
           <span class="day-tag">Día 12</span>
           <h3 class="city-title">Den Bosch</h3>
-          <p class="muted">Final relajado en ciudad medieval.</p>
+          <p class="muted">Ciudad neerlandesa medieval para cerrar el viaje relajados.</p>
         </div>
       </div>
 
     </div>
+
+    <p class="foot">
+      Alemania (Aachen, Colonia) se podría sumar como opcional si sobra tiempo y presupuesto.
+    </p>
   </section>
 
+  <p class="foot">
+    En invierno, si hay nieve o hielo, pedir siempre neumáticos de invierno en la SUV y evitar carreteras rurales sin limpiar.  
+    En las zonas urbanas de Bélgica, Holanda y París, las rutas se limpian muy rápido y son seguras.
+  </p>
 </div>
 
 <script>
 (function(){
-  const FLIGHTS = 3862;
-  const LONDON = 1190;
-  const BASE_ROUTE = 1440;
+  const FLIGHTS = 3862;   // vuelos BsAs ⇄ Londres (pareja)
+  const LONDON  = 1190;   // 7 días Londres (comidas + transporte + ocio)
+  const BASE_ROUTE = 1440; // 12 días comidas + ocio (sin transporte)
 
   const modes = {
     auto:{
       label:"🚗 Solo auto",
-      desc:"Todo el tramo continental en SUV. Súper flexible y cómodo.",
+      desc:"Todo el tramo continental en SUV. Máxima flexibilidad y muy cómodo con bebé.",
       routeTransport:1150,
-      note:"Total viaje ≈ 7.6k USD."
+      note:"Total viaje ≈ 7.6k USD para la pareja. Ideal si no les molesta conducir y estacionar."
     },
     hibrido:{
       label:"🔁 Híbrido (Eurostar + auto)",
-      desc:"Cruce Londres–Bruselas en Eurostar + SUV. Mejor equilibrio.",
+      desc:"Cruce Londres–Bruselas en Eurostar y luego SUV para la ruta. Mejor equilibrio coste / comodidad.",
       routeTransport:950,
-      note:"Total viaje ≈ 7.4k USD (RECOMENDADO)."
+      note:"Total viaje ≈ 7.4k USD para la pareja. Es la opción recomendada: menos estrés, muy cómoda en invierno."
     },
     trenes:{
       label:"🚆 Solo trenes",
-      desc:"Todo en trenes europeos. Más caro y más transbordos.",
+      desc:"Todo en trenes (Eurostar + trenes europeos). Cero conducción, pero algo más caro y más cambios con cochecito.",
       routeTransport:1300,
-      note:"Total viaje ≈ 7.8k USD."
+      note:"Total viaje ≈ 7.8k USD para la pareja. Buen confort, menos flexible."
     }
   };
 
@@ -411,7 +468,9 @@
   const modeNoteEl = document.getElementById("modeNote");
   const pillModeEl = document.getElementById("pillMode");
 
-  function fmt(x){ return "$" + x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,","); }
+  function fmt(x){
+    return "$" + x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,",");
+  }
 
   function render(modeKey){
     const mode = modes[modeKey];
@@ -435,8 +494,8 @@
       const tr = document.createElement("tr");
       tr.className = d.type === "london" ? "london" : "route";
 
-      let tTransport = d.type==="london" ? 30 : perDayRouteTransport;
-      let tDay = d.base + tTransport;
+      const tTransport = d.type==="london" ? 30 : perDayRouteTransport;
+      const tDay = d.base + tTransport;
 
       tr.innerHTML = `
         <td class="center">${d.day}</td>
@@ -445,12 +504,11 @@
              ? '<span class="badge badge-london">Londres</span>'
              : '<span class="badge badge-route">Ruta Europa</span>'}</td>
         <td>${d.km ? d.km + " km" : "—"}</td>
-        <td>${mode.label}</td>
+        <td>${d.transportLabel}</td>
         <td>${fmt(d.base)}</td>
         <td>${fmt(tTransport)}</td>
         <td><strong>${fmt(tDay)}</strong></td>
       `;
-
       tbody.appendChild(tr);
     });
 
@@ -460,7 +518,7 @@
   }
 
   document.querySelectorAll(".mode-btn").forEach(btn=>{
-    btn.addEventListener("click",()=> render(btn.dataset.mode));
+    btn.addEventListener("click",()=>render(btn.dataset.mode));
   });
 
   render("hibrido");
