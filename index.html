@@ -1,240 +1,329 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<title>Comparador de viaje – Auto vs Híbrido vs Trenes</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<title>Viaje Invierno – Bélgica, Holanda y París (Auto / Híbrido / Trenes)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-  body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:24px;line-height:1.5;color:#222;background:#fafafa;}
-  h1{margin-bottom:4px;font-size:1.7rem;}
-  h2{margin-top:24px;font-size:1.2rem;}
-  .muted{color:#666;font-size:.9rem;}
-  .mode-select{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0;}
-  .mode-select label{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;border:1px solid #ddd;background:#fff;cursor:pointer;}
-  .mode-select input{accent-color:#0070f3;}
-  table{width:100%;border-collapse:collapse;margin:12px 0 22px;background:#fff;font-size:0.9rem;}
-  th,td{border:1px solid #e5e5e5;padding:6px 8px;vertical-align:top;}
-  th{background:#f3f3f3;text-align:left;}
+  body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#0b1020;color:#f4f4f4;line-height:1.6;}
+  a{color:#ffd166;text-decoration:none;}
+  header{padding:24px 16px 16px;background:linear-gradient(120deg,#151a30,#253046);}
+  .container{max-width:1100px;margin:0 auto;padding:0 16px 40px;}
+  h1{margin:0 0 8px;font-size:1.9rem;}
+  h2{margin:32px 0 12px;font-size:1.4rem;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:6px;}
+  h3{margin:12px 0 6px;font-size:1.1rem;}
+  .muted{color:#a0a4b8;font-size:.9rem;}
+  .tagline{color:#d3d8ff;font-size:.95rem;}
+  .grid{display:grid;gap:16px;}
+  @media(min-width:800px){.grid-2{grid-template-columns:1.4fr 1fr;}}
+  @media(min-width:900px){.grid-3{grid-template-columns:repeat(3,1fr);}}
+  .card{background:#151a30;border-radius:12px;border:1px solid rgba(255,255,255,.06);padding:12px 12px 14px;overflow:hidden;}
+  .city-card{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:flex-start;}
+  .city-card img{width:120px;height:90px;object-fit:cover;border-radius:10px;}
+  @media(max-width:650px){.city-card{grid-template-columns:1fr;}
+    .city-card img{width:100%;height:160px;}
+  }
+  .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.7rem;border:1px solid rgba(255,255,255,.18);margin-right:4px;}
+  .badge-day{background:rgba(255,255,255,.06);}
+  .badge-city{background:#1b263b;}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:8px;}
+  th,td{border:1px solid rgba(255,255,255,.08);padding:6px 8px;vertical-align:top;}
+  th{background:#1b2235;text-align:left;}
   td.center{text-align:center;}
-  tr.london{background:#f9fcff;}
-  tr.route{background:#fff;}
-  .badge{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.75rem;border:1px solid #ddd;}
-  .badge-london{background:#e8f2ff;border-color:#b6d1ff;}
-  .badge-route{background:#e9fcef;border-color:#b8e6c5;}
-  .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px;}
-  .card{background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:10px 12px;}
-  .card h3{margin:4px 0;font-size:1.1rem;}
-  .foot{font-size:.8rem;color:#777;margin-top:16px;}
+  .chip-mode{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.16);font-size:.8rem;margin:2px 4px 2px 0;}
+  .chip-auto{background:rgba(111,197,166,.12);}
+  .chip-hibrido{background:rgba(130,180,255,.12);}
+  .chip-tren{background:rgba(244,162,97,.12);}
+  .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.75rem;background:#1f283d;color:#d3d8ff;}
+  footer{padding:16px;background:#050714;font-size:.8rem;color:#777;text-align:center;}
 </style>
 </head>
 <body>
 
-<h1>Comparador de viaje: Auto vs Híbrido vs Trenes</h1>
-<p class="muted">
-  Viaje de referencia: <strong>7 días Londres</strong> + <strong>12 días Europa</strong> (Bélgica, Holanda, norte de Francia y oeste de Alemania).<br>
-  Presupuesto de la <strong>pareja de Buenos Aires</strong>, sin alojamiento (ya está cubierto).<br>
-  Cambiá el modo de transporte para ver cómo afectan los costos.
-</p>
+<header>
+  <div class="container">
+    <h1>Viaje de Invierno – Bélgica, Holanda y París</h1>
+    <p class="tagline">
+      Ruta pensada para <strong>4 adultos + 1 bebé</strong>, con alojamiento ya cubierto, presupuesto principal de la pareja que viene de Buenos Aires.<br>
+      Ciudades clave: <strong>Bruselas, Brujas, Gante, Amberes, Dinant, Namur, París, Ámsterdam, Haarlem y Den Bosch</strong>. Alemania queda como opcional.
+    </p>
+  </div>
+</header>
 
-<div class="mode-select">
-  <label>
-    <input type="radio" name="mode" value="auto" checked>
-    🚗 Solo auto
-  </label>
-  <label>
-    <input type="radio" name="mode" value="hibrido">
-    🔁 Híbrido (Eurostar + auto)
-  </label>
-  <label>
-    <input type="radio" name="mode" value="trenes">
-    🚆 Solo trenes
-  </label>
+<div class="container">
+
+  <!-- COMPARATIVA DE MODOS EN INVIERNO -->
+  <section>
+    <h2>Comparativa en invierno: 🚗 Auto vs 🔁 Híbrido vs 🚆 Trenes</h2>
+    <p class="muted">
+      Mismo viaje (Londres + Bélgica + Holanda + París), tres formas de moverse. Valores aproximados <strong>por pareja</strong>, sin contar alojamiento (ustedes lo cubren).
+    </p>
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>Modos de transporte</h3>
+        <div>
+          <span class="chip-mode chip-auto">🚗 Solo auto · Máxima flexibilidad</span>
+          <span class="chip-mode chip-hibrido">🔁 Híbrido · Eurostar + SUV (recomendado)</span>
+          <span class="chip-mode chip-tren">🚆 Solo trenes · Cero conducción</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Aspecto</th>
+              <th>🚗 Auto</th>
+              <th>🔁 Híbrido (ideal)</th>
+              <th>🚆 Trenes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Costo transporte ruta (12 días)</td>
+              <td>≈ 1.100–1.300 USD</td>
+              <td><strong>≈ 900–1.050 USD</strong></td>
+              <td>≈ 1.200–1.500 USD</td>
+            </tr>
+            <tr>
+              <td>Total viaje con vuelos + Londres</td>
+              <td>≈ 4.4–4.6k USD</td>
+              <td><strong>≈ 4.2–4.4k USD</strong></td>
+              <td>≈ 4.5–4.8k USD</td>
+            </tr>
+            <tr>
+              <td>Comodidad con bebé</td>
+              <td>Muy alta (paradas cuando quieran)</td>
+              <td><strong>Muy alta + cruzar cómodo a Bruselas en tren</strong></td>
+              <td>Alta pero más cambio de trenes</td>
+            </tr>
+            <tr>
+              <td>Estrés logístico</td>
+              <td>Medio (parking y normas)</td>
+              <td><strong>Bajo</strong>: tren rápido + auto solo en Europa</td>
+              <td>Medio/alto con cochecito y maletas</td>
+            </tr>
+            <tr>
+              <td>Invierno (frío, lluvia, nieve)</td>
+              <td>Buen refugio, pero cuidado con hielo</td>
+              <td><strong>Mejor equilibrio</strong> entre confort y control</td>
+              <td>OK, pero más esperas en andenes al aire libre</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="muted">
+          Recomendación: <strong>modo híbrido</strong> (Eurostar Londres–Bruselas + SUV 10–12 días) es lo más cómodo y barato para este viaje.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Resumen económico (pareja Buenos Aires)</h3>
+        <ul class="muted">
+          <li>✈️ Vuelos BsAs ⇄ Londres: <strong>≈ 3.862 USD</strong> (ya pagados).</li>
+          <li>🇬🇧 7 días Londres (comidas + transporte + ocio): <strong>≈ 1.190 USD</strong>.</li>
+          <li>🌍 12 días ruta (Bélgica + Holanda + París, sin alojamiento): <strong>≈ 2.000–2.300 USD</strong> según modo.</li>
+        </ul>
+        <p>
+          <strong>Total viaje completo (modo híbrido): ≈ 8.000–8.300 USD</strong> → queda un colchón de <strong>~1.700–2.000 USD</strong> dentro de los 10.000 USD presupuestados.
+        </p>
+        <p class="muted">
+          Todo pensado para <strong>distancias cortas</strong>, mucho plan bajo techo y comodidad máxima en invierno.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ITINERARIO 12 DÍAS -->
+  <section>
+    <h2>Itinerario sugerido · 12 días · Invierno · 4 adultos + 1 bebé</h2>
+    <p class="muted">
+      Orden optimizado para evitar traslados largos, aprovechar mejor las horas de luz y facilitar moverse con cochecito.
+    </p>
+
+    <!-- Días 1-4: Bruselas, Brujas, Gante, Amberes -->
+    <div class="grid grid-2">
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?brussels,winter" alt="Bruselas invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 1</span>
+            <span class="badge badge-city">Bruselas</span>
+          </div>
+          <h3>Bruselas – Llegada y base inicial</h3>
+          <p class="muted">
+            Grand Place, Galerías Saint-Hubert, chocolaterías y cafés. Ciudad muy preparada para invierno y perfecta como base para moverse luego.
+          </p>
+          <p><span class="pill">Consejo bebé</span> paseos cortos, muchas paradas en cafés, revisar horarios del sueño al nuevo huso horario.</p>
+        </div>
+      </div>
+
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?bruges,winter" alt="Brujas invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 2</span>
+            <span class="badge badge-city">Brujas (desde Bruselas)</span>
+          </div>
+          <h3>Brujas – Día completo</h3>
+          <p class="muted">
+            Canales, Markt, paseo fotográfico. Todo muy compacto y plano: ideal para cochecito. Se puede volver a Bruselas a dormir.
+          </p>
+          <p><span class="pill">Distancia</span> ≈ 100 km ida, 100 km vuelta · 1 h cada tramo en auto o tren.</p>
+        </div>
+      </div>
+
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?ghent,winter" alt="Gante invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 3</span>
+            <span class="badge badge-city">Gante</span>
+          </div>
+          <h3>Gante – Medieval y viva</h3>
+          <p class="muted">
+            Castillo de los Condes, Graslei/Korenlei, catedral. Excelente mezcla de ciudad medieval y vida local.
+          </p>
+          <p><span class="pill">Distancia</span> ≈ 60 km desde Bruselas · unos 45 min en auto o tren.</p>
+        </div>
+      </div>
+
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?antwerp,winter" alt="Amberes invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 4</span>
+            <span class="badge badge-city">Amberes</span>
+          </div>
+          <h3>Amberes – Moda, puerto y cafés</h3>
+          <p class="muted">
+            Catedral, Grote Markt, barrio de la moda. Buena ciudad para shopping y comer rico antes de seguir viaje.
+          </p>
+          <p><span class="pill">Distancia</span> ≈ 45 km desde Bruselas · unos 40 min.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Días 5-6: Namur y Dinant -->
+    <div class="grid grid-2">
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?namur,winter" alt="Namur invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 5</span>
+            <span class="badge badge-city">Namur</span>
+          </div>
+          <h3>Namur – Capital de Valonia</h3>
+          <p class="muted">
+            Ciudadela con vistas, centro histórico y ambiente tranquilo. Ideal como enlace entre Bruselas y Dinant.
+          </p>
+          <p><span class="pill">Distancia</span> ≈ 65 km desde Bruselas · 1 h en auto.</p>
+        </div>
+      </div>
+
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?dinant,winter" alt="Dinant invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 6</span>
+            <span class="badge badge-city">Dinant</span>
+          </div>
+          <h3>Dinant – Río y fortaleza</h3>
+          <p class="muted">
+            Foto icónica con la iglesia y la roca, paseo por la ribera del Mosa y subida a la ciudadela (teleférico o escalera).
+          </p>
+          <p><span class="pill">Distancia</span> ≈ 30–40 min desde Namur · perfecto para un día corto con bebé.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Días 7-9: París -->
+    <div class="grid grid-2">
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?paris,winter" alt="París invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Días 7–8</span>
+            <span class="badge badge-city">París</span>
+          </div>
+          <h3>París – Clásico en invierno</h3>
+          <p class="muted">
+            Torre Eiffel, paseo por el Sena, Notre Dame (exteriores), barrios con cafés. Ciudad muy buena para invierno por su oferta bajo techo.
+          </p>
+          <p><span class="pill">Distancia</span> Dinant/Namur → París ≈ 3–4 h en auto o 1h20 en tren rápido desde Bruselas.</p>
+        </div>
+      </div>
+
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?louvre,winter" alt="Museos París">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 9</span>
+            <span class="badge badge-city">París (museos)</span>
+          </div>
+          <h3>Día de museos y descanso</h3>
+          <p class="muted">
+            Louvre o Musée d'Orsay, cafés cercanos, paseos cortos. Día perfecto para resguardarse del frío con calefacción garantizada.
+          </p>
+          <p><span class="pill">Consejo bebé</span> usar portabebé dentro de museos, cochecito plegable y capas de ropa.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Días 10-12: Holanda -->
+    <div class="grid grid-3">
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?haarlem,winter" alt="Haarlem invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 10</span>
+            <span class="badge badge-city">Haarlem</span>
+          </div>
+          <h3>Haarlem – Mini Ámsterdam tranquila</h3>
+          <p class="muted">
+            Canales, plaza principal, cafeterías. Mucho más relajada que Ámsterdam, ideal para bajar un cambio.
+          </p>
+          <p><span class="pill">París → Haarlem</span> ≈ 5 h combinando trenes / auto con una parada intermedia.</p>
+        </div>
+      </div>
+
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?amsterdam,winter" alt="Ámsterdam invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 11</span>
+            <span class="badge badge-city">Ámsterdam</span>
+          </div>
+          <h3>Ámsterdam – Canales y museos</h3>
+          <p class="muted">
+            Paseo en barco, Rijksmuseum, Van Gogh. Usar Park &amp; Ride si van en auto y moverse en tranvía dentro de la ciudad.
+          </p>
+          <p><span class="pill">Consejo cochecito</span> intentar evitar horas punta en el centro histórico.</p>
+        </div>
+      </div>
+
+      <div class="card city-card">
+        <img src="https://source.unsplash.com/800x600/?den%20bosch,winter" alt="Den Bosch invierno">
+        <div>
+          <div>
+            <span class="badge badge-day">Día 12</span>
+            <span class="badge badge-city">Den Bosch</span>
+          </div>
+          <h3>Den Bosch – Final tranquilo</h3>
+          <p class="muted">
+            Ciudad medieval muy agradable, menos turística, perfecta para el último día relajado antes de volver hacia Bruselas o tomar vuelo desde Holanda.
+          </p>
+          <p><span class="pill">Opcional</span> desde aquí pueden ir a Alemania (Aachen/Colonia) si les sobran días y energía.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="muted">
+      Alemania queda como <strong>extra opcional</strong>: si el grupo está descansado y el bebé bien adaptado, se puede sumar Aachen/Colonia 1–2 días más sin romper el presupuesto.
+    </p>
+  </section>
+
 </div>
-<p class="muted" id="modeDesc"></p>
 
-<h2>Resumen de costes (pareja de Buenos Aires)</h2>
-<div class="summary-grid">
-  <div class="card">
-    <div class="badge">✈️ Vuelos intercontinentales</div>
-    <h3 id="sumFlights">–</h3>
-    <p class="muted">Pasajes Buenos Aires ⇄ Londres (ya pagados).</p>
-  </div>
-  <div class="card">
-    <div class="badge badge-london">🇬🇧 Semana en Londres</div>
-    <h3 id="sumLondon">–</h3>
-    <p class="muted">Comidas, transporte urbano y actividades (7 días, sin alojamiento).</p>
-  </div>
-  <div class="card">
-    <div class="badge badge-route">🌍 Ruta Europa (12 días)</div>
-    <h3 id="sumRoute">–</h3>
-    <p class="muted">Comidas, ocio y transporte según modo elegido.</p>
-  </div>
-  <div class="card">
-    <div class="badge">💰 Total viaje pareja</div>
-    <h3 id="sumTotal">–</h3>
-    <p class="muted">Incluye vuelos + Londres + ruta completa.</p>
-  </div>
-</div>
-
-<h2>Detalle día por día</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Día</th>
-      <th>Ciudad / Etapa</th>
-      <th>Tipo</th>
-      <th>Km aprox</th>
-      <th>Transporte</th>
-      <th>Costo base (comidas + ocio)</th>
-      <th>Costo transporte día</th>
-      <th>Total día</th>
-      <th>Notas</th>
-    </tr>
-  </thead>
-  <tbody id="tbodyDays"></tbody>
-</table>
-
-<div class="foot">
-  Valores aproximados en USD para la <strong>pareja</strong>, sin alojamiento (ya está cubierto).<br>
-  El modo <em>Híbrido</em> combina Eurostar para cruzar el Canal de la Mancha y auto para la ruta por Europa.
-</div>
-
-<script>
-(function(){
-  // Datos base del viaje: 7 días Londres + 12 días ruta
-  // type: "london" o "route" para cálculo de costes.
-  const days = [
-    {day:1, city:"Londres",          type:"london", activity:"Centro clásico (Westminster, South Bank)", km:null, notes:"Adaptación, paseo suave."},
-    {day:2, city:"Londres",          type:"london", activity:"Museos y parques (Natural History, Hyde Park)", km:null, notes:"Día indoor y cochecito."},
-    {day:3, city:"Londres",          type:"london", activity:"Tower of London, Tower Bridge", km:null, notes:"Turnarse para entrar si hace falta."},
-    {day:4, city:"Londres",          type:"london", activity:"Mercados (Borough, Camden u otros)", km:null, notes:"Comida callejera, día flexible."},
-    {day:5, city:"Londres",          type:"london", activity:"Greenwich y río", km:null, notes:"Barco / DLR, parque con vistas."},
-    {day:6, city:"Londres",          type:"london", activity:"Compras y cafés", km:null, notes:"Día libre para compras."},
-    {day:7, city:"Londres",          type:"london", activity:"Día tranquilo + preparar salida", km:null, notes:"Revisar billetes y equipaje."},
-
-    {day:8, city:"Londres → Bruselas", type:"route", activity:"Eurostar + llegada a Bruselas", km:350, notes:"Cruce del Canal, check-in, paseo Grand Place."},
-    {day:9, city:"Brujas (desde Bruselas)", type:"route", activity:"Visita de Brujas", km:200, notes:"Ida y vuelta, canales y casco histórico."},
-    {day:10, city:"Gante (desde Bruselas)", type:"route", activity:"Visita de Gante", km:120, notes:"Castillo, Graslei, cafés."},
-    {day:11, city:"Amberes → Holanda (Rotterdam)", type:"route", activity:"Amberes y salida a Holanda", km:200, notes:"Moda y arquitectura moderna."},
-    {day:12, city:"Rotterdam",       type:"route", activity:"Ciudad moderna, Markthal, Cube Houses", km:30, notes:"Día más urbano, indoor-friendly."},
-    {day:13, city:"Ámsterdam",       type:"route", activity:"Canales y museos", km:80, notes:"Paseo en barco, museos principales."},
-    {day:14, city:"Utrecht",         type:"route", activity:"Centro histórico y canales", km:80, notes:"Más tranquilo que Ámsterdam."},
-    {day:15, city:"Lille (norte de Francia)", type:"route", activity:"Visita de Lille", km:250, notes:"Arquitectura francesa, buenos cafés."},
-    {day:16, city:"Aachen (Alemania)", type:"route", activity:"Catedral y casco histórico", km:220, notes:"Cultura alemana + historia."},
-    {day:17, city:"Colonia",         type:"route", activity:"Catedral y paseo por el Rin", km:80, notes:"Vistas al río, museos."},
-    {day:18, city:"Düsseldorf",      type:"route", activity:"Ciudad y compras", km:60, notes:"Königsallee, paseo ribera."},
-    {day:19, city:"Vuelta a Londres", type:"route", activity:"Vuelo o tren de regreso a Londres", km:350, notes:"Cierre del viaje."}
-  ];
-
-  // Costes base (sin transporte) por tipo de día
-  const baseCosts = {
-    london: 170, // comidas + metro + ocio (pareja)
-    route: 120   // comidas + ocio (sin transporte, pareja)
-  };
-
-  // Modos de transporte
-  const modes = {
-    auto: {
-      label: "Solo auto",
-      desc: "Todo el tramo continental se hace en SUV (Bruselas, Bélgica, Holanda, norte Francia y oeste Alemania). Cruce a Europa continental en ferry o tren+auto, simplificado aquí.",
-      // Coste de transporte por día según tipo de día (USD, pareja)
-      perDay: {
-        london: 30,   // transporte local en Londres
-        route: 60     // combustible, peajes, prorrateo del alquiler SUV
-      },
-      // Extra global para este modo (p.ej. ajustes, ferries)
-      extraRoute: 0
-    },
-    hibrido: {
-      label: "Híbrido (Eurostar + auto)",
-      desc: "Cruce Londres–Bruselas en Eurostar y ruta por Europa en SUV compartida. Es la opción más cómoda y barata para ustedes.",
-      perDay: {
-        london: 30,
-        route: 40      // SUV más amortizada y Eurostar ya contemplado
-      },
-      extraRoute: 350   // Eurostar ida/vuelta para la pareja aproximado
-    },
-    trenes: {
-      label: "Solo trenes",
-      desc: "Todos los tramos Londres–Europa y dentro del continente se hacen en tren. Muy cómodo pero algo más caro para esta ruta.",
-      perDay: {
-        london: 30,
-        route: 70       // trenes interurbanos diarios (pareja)
-      },
-      extraRoute: 0
-    }
-  };
-
-  const FLIGHTS = 3862; // USD, pareja
-  const LONDON_DAYS = days.filter(d => d.type === "london").length;
-
-  const tbody = document.getElementById("tbodyDays");
-  const sumFlightsEl = document.getElementById("sumFlights");
-  const sumLondonEl = document.getElementById("sumLondon");
-  const sumRouteEl = document.getElementById("sumRoute");
-  const sumTotalEl = document.getElementById("sumTotal");
-  const modeDescEl = document.getElementById("modeDesc");
-
-  function formatUSD(x){
-    return "$" + x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-
-  function render(modeKey){
-    const mode = modes[modeKey];
-    modeDescEl.textContent = mode.desc;
-
-    tbody.innerHTML = "";
-    let routeTotal = 0;
-    let londonTotal = 0;
-
-    days.forEach(d => {
-      const base = baseCosts[d.type];
-      const tCost = mode.perDay[d.type];
-      const totalDay = base + tCost;
-
-      if(d.type === "london") londonTotal += totalDay;
-      else routeTotal += totalDay;
-
-      const tr = document.createElement("tr");
-      tr.className = d.type === "london" ? "london" : "route";
-      const badge = d.type === "london" ? 
-        '<span class="badge badge-london">Londres</span>' : 
-        '<span class="badge badge-route">Ruta Europa</span>';
-
-      tr.innerHTML = `
-        <td class="center">${d.day}</td>
-        <td>${d.city}</td>
-        <td>${badge}</td>
-        <td>${d.km ? d.km + " km" : "—"}</td>
-        <td>${mode.label}</td>
-        <td>${formatUSD(base)}</td>
-        <td>${formatUSD(tCost)}</td>
-        <td><strong>${formatUSD(totalDay)}</strong></td>
-        <td>${d.notes || ""}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    // Añadir costes extras de ruta (Eurostar, etc.)
-    const routeWithExtra = routeTotal + mode.extraRoute;
-
-    sumFlightsEl.textContent = formatUSD(FLIGHTS);
-    sumLondonEl.textContent = formatUSD(londonTotal);
-    sumRouteEl.textContent = formatUSD(routeWithExtra);
-
-    const grandTotal = FLIGHTS + londonTotal + routeWithExtra;
-    sumTotalEl.textContent = formatUSD(grandTotal);
-  }
-
-  // Manejar cambio de modo
-  document.querySelectorAll('input[name="mode"]').forEach(r => {
-    r.addEventListener("change", () => render(r.value));
-  });
-
-  // Inicial
-  render("auto");
-})();
-</script>
+<footer>
+  Plataforma casera de planificación de viaje de invierno · Bélgica, Holanda y París · Auto / Híbrido / Trenes · Diseñado para amigos y familia con bebé.
+</footer>
 
 </body>
 </html>
