@@ -1,196 +1,33 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<title>Viaje Invierno – Bélgica, Holanda y París (Auto / Híbrido / Trenes)</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-  :root{
-    --bg:#050816;
-    --card:#0c1224;
-    --border:rgba(255,255,255,.08);
-    --text:#f5f5ff;
-    --muted:#a1a6c5;
-    --accent-auto:#6fc5a6;
-    --accent-hibrido:#82b4ff;
-    --accent-tren:#f4a261;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    background:radial-gradient(circle at top,#151b3b 0,#050816 52%,#02020a 100%);
-    color:var(--text);
-    line-height:1.6;
-  }
-  a{color:#ffd166;text-decoration:none;}
-  header{
-    padding:22px 16px 12px;
-    background:linear-gradient(130deg,rgba(130,180,255,.25),rgba(14,20,40,1));
-    border-bottom:1px solid var(--border);
-  }
-  .container{max-width:1120px;margin:0 auto;padding:0 16px 36px;}
-  h1{margin:0 0 6px;font-size:1.9rem;}
-  h2{margin:28px 0 10px;font-size:1.4rem;border-bottom:1px solid var(--border);padding-bottom:4px;}
-  h3{margin:10px 0 6px;font-size:1.1rem;}
-  .muted{color:var(--muted);font-size:.9rem;}
-  .tagline{color:#d6dcff;font-size:.96rem;}
-
-  .mode-switch{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin:16px 0 8px;
-  }
-  .mode-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    padding:6px 12px;
-    border-radius:999px;
-    border:1px solid var(--border);
-    background:rgba(3,7,30,.7);
-    font-size:.86rem;
-    cursor:pointer;
-    transition:.15s ease;
-  }
-  .mode-btn span.dot{
-    width:10px;height:10px;border-radius:999px;background:var(--border);
-  }
-  .mode-btn[data-mode="auto"].active{
-    border-color:var(--accent-auto);
-    box-shadow:0 0 0 1px rgba(111,197,166,.4);
-  }
-  .mode-btn[data-mode="auto"].active span.dot{background:var(--accent-auto);}
-  .mode-btn[data-mode="hibrido"].active{
-    border-color:var(--accent-hibrido);
-    box-shadow:0 0 0 1px rgba(130,180,255,.4);
-  }
-  .mode-btn[data-mode="hibrido"].active span.dot{background:var(--accent-hibrido);}
-  .mode-btn[data-mode="trenes"].active{
-    border-color:var(--accent-tren);
-    box-shadow:0 0 0 1px rgba(244,162,97,.4);
-  }
-  .mode-btn[data-mode="trenes"].active span.dot{background:var(--accent-tren);}
-
-  .grid{display:grid;gap:14px;}
-  @media(min-width:880px){.grid-2{grid-template-columns:1.4fr 1fr;}}
-  @media(min-width:950px){.grid-3{grid-template-columns:repeat(3,1fr);}}
-
-  .card{
-    background:var(--card);
-    border-radius:14px;
-    border:1px solid var(--border);
-    padding:12px 12px 14px;
-  }
-
-  .pill{
-    display:inline-block;
-    padding:2px 8px;
-    border-radius:999px;
-    font-size:.76rem;
-    background:rgba(255,255,255,.04);
-    border:1px solid var(--border);
-    margin-bottom:4px;
-  }
-
-  .summary-number{
-    font-size:1.4rem;
-    font-weight:600;
-    margin:2px 0;
-  }
-  .summary-label{
-    font-size:.8rem;
-    color:var(--muted);
-  }
-
-  table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:8px;
-    font-size:.86rem;
-  }
-  th,td{
-    border:1px solid rgba(255,255,255,.06);
-    padding:6px 7px;
-    vertical-align:top;
-  }
-  th{
-    background:rgba(3,10,40,.85);
-    text-align:left;
-  }
-  td.center{text-align:center;}
-  tr.london{background:rgba(112,128,255,.06);}
-  tr.route{background:rgba(20,180,140,.04);}
-  .badge{
-    display:inline-block;
-    padding:2px 6px;
-    border-radius:999px;
-    font-size:.72rem;
-    border:1px solid var(--border);
-    background:rgba(255,255,255,.03);
-    margin-right:4px;
-  }
-  .badge-london{border-color:#7f8cff;color:#cdd2ff;}
-  .badge-route{border-color:#6fc5a6;color:#c9f7e5;}
-
-  .city-grid{display:grid;gap:14px;}
-  @media(min-width:840px){.city-grid{grid-template-columns:repeat(2,1fr);}}
-  @media(min-width:1040px){.city-grid{grid-template-columns:repeat(3,1fr);}}
-  .city-card{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:14px;
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
-  }
-  .city-card img{
-    width:100%;
-    height:150px;
-    object-fit:cover;
-  }
-  .city-body{padding:9px 11px 11px;}
-  .city-title{margin:4px 0 2px;font-size:1rem;}
-  .day-tag{
-    display:inline-block;
-    padding:1px 7px;
-    border-radius:999px;
-    font-size:.72rem;
-    border:1px solid var(--border);
-    margin-right:4px;
-  }
-
-  .foot{
-    font-size:.78rem;
-    color:var(--muted);
-    margin-top:16px;
-    text-align:center;
-  }
-</style>
+  <meta charset="utf-8" />
+  <title>Planificador de Viaje – Invierno Europa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
 <header>
   <div class="container">
-    <h1>Viaje de Invierno – Bélgica, Holanda y París</h1>
+    <h1>Planificador de Viaje – Invierno</h1>
     <p class="tagline">
-      4 adultos + 1 bebé · Alojamiento ya cubierto · Presupuesto fuerte de la pareja que viene de Buenos Aires.  
-      Los valores son <strong>estimados en USD por pareja</strong>.
+      Bélgica · Holanda · París (Opcional) · 4 adultos + 1 bebé
     </p>
   </div>
 </header>
 
 <div class="container">
 
-  <!-- SELECTOR -->
+  <!-- ============================ -->
+  <!-- SELECTOR MODO DE VIAJE       -->
+  <!-- ============================ -->
   <section>
     <h2>Elegí el tipo de viaje</h2>
-    <p class="muted">Mismo itinerario, cambia cómo se mueven y cuánto gastan en transporte.</p>
-
     <div class="mode-switch">
       <button class="mode-btn" data-mode="auto"><span class="dot"></span> 🚗 Solo auto</button>
-      <button class="mode-btn" data-mode="hibrido"><span class="dot"></span> 🔁 Híbrido (Eurostar + auto)</button>
+      <button class="mode-btn" data-mode="hibrido"><span class="dot"></span> 🔁 Híbrido</button>
       <button class="mode-btn" data-mode="trenes"><span class="dot"></span> 🚆 Solo trenes</button>
     </div>
 
@@ -200,86 +37,71 @@
       <div class="card">
         <span class="pill">✈️ Vuelos</span>
         <div class="summary-number" id="sumFlights">–</div>
-        <div class="summary-label">BsAs ⇄ Londres (ya pagados).</div>
       </div>
       <div class="card">
         <span class="pill">🇬🇧 Londres (7 días)</span>
         <div class="summary-number" id="sumLondon">–</div>
-        <div class="summary-label">Comidas + transporte + actividades (sin hotel).</div>
       </div>
       <div class="card">
-        <span class="pill">🌍 Ruta Europa (12 días)</span>
+        <span class="pill">🌍 Ruta Europa</span>
         <div class="summary-number" id="sumRoute">–</div>
-        <div class="summary-label">Transporte + comidas + ocio en Bélgica, París y Holanda.</div>
       </div>
     </div>
 
     <div class="card" style="margin-top:14px;">
       <span class="pill" id="pillMode">Tipo de viaje seleccionado</span>
       <div class="summary-number" id="sumTotal">–</div>
-      <div class="summary-label">Total estimado para la pareja (vuelos + Londres + ruta completa).</div>
       <p class="muted" id="modeNote"></p>
     </div>
   </section>
 
-  <!-- EXPLICACIÓN COSTES TRANSPORTE -->
+  <!-- ============================ -->
+  <!-- BASES                        -->
+  <!-- ============================ -->
   <section>
-    <h2>Cómo se calculan los costes de transporte (aprox.)</h2>
-    <p class="muted">
-      Cálculo aproximado para una <strong>pareja</strong>, suponiendo una SUV tipo Tiguan compartida entre 2 parejas.
-    </p>
+    <h2>Configurar Bases</h2>
+
     <div class="card">
-      <table>
-        <thead>
-          <tr>
-            <th>Modo</th>
-            <th>Componentes</th>
-            <th>Total transporte ruta (12 días)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>🚗 Solo auto</td>
-            <td>
-              • Alquiler SUV (compartido): ≈ 600 USD<br>
-              • Combustible (≈ 2.240 km): ≈ 250 USD<br>
-              • Peajes + parking ciudades: ≈ 300 USD
-            </td>
-            <td><strong>≈ 1.150 USD</strong></td>
-          </tr>
-          <tr>
-            <td>🔁 Híbrido</td>
-            <td>
-              • Eurostar Londres ⇄ Bruselas: ≈ 350 USD<br>
-              • Alquiler SUV (menos días): ≈ 350 USD<br>
-              • Combustible: ≈ 150 USD<br>
-              • Peajes + parking: ≈ 100 USD
-            </td>
-            <td><strong>≈ 950 USD</strong></td>
-          </tr>
-          <tr>
-            <td>🚆 Solo trenes</td>
-            <td>
-              • Eurostar Londres ⇄ Bruselas: ≈ 350 USD<br>
-              • Trenes Bélgica, Francia, Holanda: ≈ 950 USD
-            </td>
-            <td><strong>≈ 1.300 USD</strong></td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="muted">
-        Estos totales de transporte se reparten en la tabla día por día para mostrar un coste medio diario según el modo elegido.
-      </p>
+      <h3>📍 Base en Bélgica</h3>
+      <select id="baseBelgium">
+        <option value="brussels">Bruselas (Recomendada)</option>
+        <option value="mechelen">Mechelen</option>
+        <option value="ghent">Gante</option>
+      </select>
+      <p id="descBelgium" class="muted"></p>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+      <h3>📍 Base en Holanda</h3>
+      <select id="baseHolland">
+        <option value="haarlem">Haarlem (Recomendada)</option>
+        <option value="amsterdam">Ámsterdam</option>
+        <option value="utrecht">Utrecht</option>
+      </select>
+      <p id="descHolland" class="muted"></p>
     </div>
   </section>
 
-  <!-- TABLA DÍA A DÍA -->
+  <!-- ============================ -->
+  <!-- CIUDADES OPCIONALES          -->
+  <!-- ============================ -->
   <section>
-    <h2>Tabla del viaje día por día</h2>
-    <p class="muted">
-      Itinerario fijo de 19 días (7 Londres + 12 de ruta). Los costes "Base" son comidas+ocio; el "Transporte día" cambia según la opción elegida arriba.
-    </p>
+    <h2>Ciudades opcionales</h2>
+    <div class="card">
+      <label><input type="checkbox" class="optCity" value="paris"> París</label><br>
+      <label><input type="checkbox" class="optCity" value="lille"> Lille</label><br>
+      <label><input type="checkbox" class="optCity" value="luxembourg"> Luxemburgo</label><br>
+      <label><input type="checkbox" class="optCity" value="aachen"> Aachen</label><br>
+      <label><input type="checkbox" class="optCity" value="colonia"> Colonia</label><br>
+      <label><input type="checkbox" class="optCity" value="dusseldorf"> Düsseldorf</label>
+    </div>
+  </section>
 
+  <!-- ============================ -->
+  <!-- TABLA                        -->
+  <!-- ============================ -->
+  <section>
+    <h2>Tabla del viaje día a día</h2>
     <div class="card">
       <table>
         <thead>
@@ -299,231 +121,19 @@
     </div>
   </section>
 
-  <!-- ITINERARIO VISUAL -->
+  <!-- ============================ -->
+  <!-- ITINERARIO VISUAL DINÁMICO   -->
+  <!-- ============================ -->
   <section>
-    <h2>Itinerario visual (fotos fijas)</h2>
-    <p class="muted">Imágenes con URLs directas de Unsplash, no se rompen ni requieren subir archivos.</p>
+    <h2>Itinerario visual</h2>
+    <p class="muted">Las ciudades opcionales aparecerán automáticamente aquí.</p>
 
-    <div class="city-grid">
+    <div id="cityGrid" class="city-grid"></div>
 
-      <div class="city-card">
-        <img src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcT28GwC9rO5KJptMouXCDOVsRH7rcOrtwgCCcc7nH3S5A6oGTT743KJVg65ZqniakLvlIVr8qgfTQahX7q4dNVSk2U&s=19" alt="Bruselas" />
-        <div class="city-body">
-          <span class="day-tag">Día 1</span>
-          <h3 class="city-title">Bruselas</h3>
-          <p class="muted">Base inicial, Grand Place y galerías cubiertas.</p>
-        </div>
-      </div>
-
-      <div class="city-card">
-        <img src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcRGl5LBXt9Sh_NXdK4sv3oa-SS0Z4yvo2HCpbNsRbxoZpMjJkGZDHKZy2vcJ3f_0413en_KhGpN9lWLJiAepdB1ntQ&s=19" alt="Brujas" />
-        <div class="city-body">
-          <span class="day-tag">Día 2</span>
-          <h3 class="city-title">Brujas</h3>
-          <p class="muted">Canales, Markt, ciudad medieval muy compacta.</p>
-        </div>
-      </div>
-
-      <div class="city-card">
-        <img src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcRtRV2vXTi8FF5eND2qhc2L-nytp8ePnLxd90ZUFCLTEZdy4cxe9k_sdyZiU_uxPI_CQ2F94XYDa-3PuOYFtleS2Gc&s=19" alt="Gante" />
-        <div class="city-body">
-          <span class="day-tag">Día 3</span>
-          <h3 class="city-title">Gante</h3>
-          <p class="muted">Castillo de los Condes y zona Graslei/Korenlei.</p>
-        </div>
-      </div>
-
-      <div class="city-card">
-        <img src="https://images.unsplash.com/photo-1544986581-efac024faf62?auto=format&fit=crop&w=900&q=80" alt="Amberes" />
-        <div class="city-body">
-          <span class="day-tag">Día 4</span>
-          <h3 class="city-title">Amberes</h3>
-          <p class="muted">Moda, cafés, catedral y Grote Markt.</p>
-        </div>
-      </div>
-
-      <div class="city-card">
-        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80" alt="Namur" />
-        <div class="city-body">
-          <span class="day-tag">Día 5</span>
-          <h3 class="city-title">Namur</h3>
-          <p class="muted">Ciudadela y vistas al río, día más tranquilo.</p>
-        </div>
-      </div>
-
-      <div class="city-card">
-        <img src="data:image/jpeg;base64,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" alt="Dinant" />
-        <div class="city-body">
-          <span class="day-tag">Día 6</span>
-          <h3 class="city-title">Dinant</h3>
-          <p class="muted">Postal del río Mosa, fortaleza e iglesia.</p>
-        </div>
-      </div>
-
-      <div class="city-card">
-        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=900&q=80" alt="París" />
-        <div class="city-body">
-          <span class="day-tag">Días 7–9</span>
-          <h3 class="city-title">París</h3>
-          <p class="muted">Museos, cafés, Sena y paseo clásico de ciudad grande.</p>
-        </div>
-      </div>
-
-      <div class="city-card">
-        <img src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcSBTGD-Hq2zFR5ZJrIpYSJjy71JS1QN0ES4Q3H0junNBsv9GbWw7JvCuhJBRj2r_VBud5stbYFBKFCN0gbQRGtluRc&s=19" alt="Haarlem" />
-        <div class="city-body">
-          <span class="day-tag">Día 10</span>
-          <h3 class="city-title">Haarlem</h3>
-          <p class="muted">Mini Ámsterdam tranquila, perfecta con bebé.</p>
-        </div>
-      </div>
-
-      <div class="city-card">
-        <img src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcTVBh9lSB2xk1QqNqnZMcwZ1qQG56kCw031p6E4QYjqqbPGYtjW7qcrO0mX7wBByN8xDHeK8zHLJcSfV3InYA785Ss&s=19" alt="Ámsterdam" />
-        <div class="city-body">
-          <span class="day-tag">Día 11</span>
-          <h3 class="city-title">Ámsterdam</h3>
-          <p class="muted">Canales, barco cubierto y museos.</p>
-        </div>
-      </div>
-
-      <div class="city-card">
-        <img src="https://encrypted-tbn0.gstatic.com/licensed-image?q=tbn:ANd9GcQPAXKqgvlhfOOwYYFotG1C0Flu0N2XjEBt6H2ZnvSnSHgQI04fn4YMDX6PaL6RmGXow1hIuDgfemXHC1SuJkyQ9ZZU&s=19" alt="Den Bosch" />
-        <div class="city-body">
-          <span class="day-tag">Día 12</span>
-          <h3 class="city-title">Den Bosch</h3>
-          <p class="muted">Ciudad neerlandesa medieval para cerrar el viaje relajados.</p>
-        </div>
-      </div>
-
-    </div>
-
-    <p class="foot">
-      Alemania (Aachen, Colonia) se podría sumar como opcional si sobra tiempo y presupuesto.
-    </p>
   </section>
 
-  <p class="foot">
-    En invierno, si hay nieve o hielo, pedir siempre neumáticos de invierno en la SUV y evitar carreteras rurales sin limpiar.  
-    En las zonas urbanas de Bélgica, Holanda y París, las rutas se limpian muy rápido y son seguras.
-  </p>
 </div>
 
-<script>
-(function(){
-  const FLIGHTS = 3862;   // vuelos BsAs ⇄ Londres (pareja)
-  const LONDON  = 1190;   // 7 días Londres (comidas + transporte + ocio)
-  const BASE_ROUTE = 1440; // 12 días comidas + ocio (sin transporte)
-
-  const modes = {
-    auto:{
-      label:"🚗 Solo auto",
-      desc:"Todo el tramo continental en SUV. Máxima flexibilidad y muy cómodo con bebé.",
-      routeTransport:1150,
-      note:"Total viaje ≈ 7.6k USD para la pareja. Ideal si no les molesta conducir y estacionar."
-    },
-    hibrido:{
-      label:"🔁 Híbrido (Eurostar + auto)",
-      desc:"Cruce Londres–Bruselas en Eurostar y luego SUV para la ruta. Mejor equilibrio coste / comodidad.",
-      routeTransport:950,
-      note:"Total viaje ≈ 7.4k USD para la pareja. Es la opción recomendada: menos estrés, muy cómoda en invierno."
-    },
-    trenes:{
-      label:"🚆 Solo trenes",
-      desc:"Todo en trenes (Eurostar + trenes europeos). Cero conducción, pero algo más caro y más cambios con cochecito.",
-      routeTransport:1300,
-      note:"Total viaje ≈ 7.8k USD para la pareja. Buen confort, menos flexible."
-    }
-  };
-
-  const days = [
-    {day:1, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
-    {day:2, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
-    {day:3, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
-    {day:4, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
-    {day:5, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
-    {day:6, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
-    {day:7, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
-
-    {day:8, city:"Londres → Bruselas", type:"route", base:120, km:350, transportLabel:"Cruce a Bruselas"},
-    {day:9, city:"Brujas", type:"route", base:120, km:200, transportLabel:"Bruselas ↔ Brujas"},
-    {day:10, city:"Gante", type:"route", base:120, km:120, transportLabel:"Bruselas ↔ Gante"},
-    {day:11, city:"Amberes", type:"route", base:120, km:120, transportLabel:"Bruselas → Amberes"},
-    {day:12, city:"Namur", type:"route", base:120, km:70, transportLabel:"Amberes → Namur"},
-    {day:13, city:"Dinant", type:"route", base:120, km:60, transportLabel:"Namur → Dinant"},
-    {day:14, city:"París (llegada)", type:"route", base:120, km:300, transportLabel:"Dinant/Namur → París"},
-    {day:15, city:"París (museos)", type:"route", base:120, km:40, transportLabel:"Movimientos urbanos"},
-    {day:16, city:"Haarlem", type:"route", base:120, km:500, transportLabel:"París → Holanda"},
-    {day:17, city:"Ámsterdam", type:"route", base:120, km:30, transportLabel:"Haarlem → Ámsterdam"},
-    {day:18, city:"Den Bosch", type:"route", base:120, km:100, transportLabel:"Ámsterdam → Den Bosch"},
-    {day:19, city:"Regreso", type:"route", base:120, km:350, transportLabel:"Holanda → Bruselas / aeropuerto"}
-  ];
-
-  const tbody = document.getElementById("tbodyDays");
-  const modeDesc = document.getElementById("modeDesc");
-  const sumFlightsEl = document.getElementById("sumFlights");
-  const sumLondonEl = document.getElementById("sumLondon");
-  const sumRouteEl = document.getElementById("sumRoute");
-  const sumTotalEl = document.getElementById("sumTotal");
-  const modeNoteEl = document.getElementById("modeNote");
-  const pillModeEl = document.getElementById("pillMode");
-
-  function fmt(x){
-    return "$" + x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,",");
-  }
-
-  function render(modeKey){
-    const mode = modes[modeKey];
-    const perDayRouteTransport = mode.routeTransport / 12;
-
-    const routeTotal = BASE_ROUTE + mode.routeTransport;
-    const totalTrip = FLIGHTS + LONDON + routeTotal;
-
-    sumFlightsEl.textContent = fmt(FLIGHTS);
-    sumLondonEl.textContent = fmt(LONDON);
-    sumRouteEl.textContent = fmt(routeTotal);
-    sumTotalEl.textContent = fmt(totalTrip);
-
-    modeDesc.textContent = mode.desc;
-    modeNoteEl.textContent = mode.note;
-    pillModeEl.textContent = "Tipo de viaje seleccionado: " + mode.label;
-
-    tbody.innerHTML = "";
-
-    days.forEach(d=>{
-      const tr = document.createElement("tr");
-      tr.className = d.type === "london" ? "london" : "route";
-
-      const tTransport = d.type==="london" ? 30 : perDayRouteTransport;
-      const tDay = d.base + tTransport;
-
-      tr.innerHTML = `
-        <td class="center">${d.day}</td>
-        <td>${d.city}</td>
-        <td>${d.type==="london"
-             ? '<span class="badge badge-london">Londres</span>'
-             : '<span class="badge badge-route">Ruta Europa</span>'}</td>
-        <td>${d.km ? d.km + " km" : "—"}</td>
-        <td>${d.transportLabel}</td>
-        <td>${fmt(d.base)}</td>
-        <td>${fmt(tTransport)}</td>
-        <td><strong>${fmt(tDay)}</strong></td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    document.querySelectorAll(".mode-btn").forEach(btn=>{
-      btn.classList.toggle("active", btn.dataset.mode === modeKey);
-    });
-  }
-
-  document.querySelectorAll(".mode-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>render(btn.dataset.mode));
-  });
-
-  render("hibrido");
-})();
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
