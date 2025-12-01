@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Comparador de viaje – Auto vs Híbrido vs Trenes</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:24px;line-height:1.5;color:#222;background:#fafafa;}
+  h1{margin-bottom:4px;font-size:1.7rem;}
+  h2{margin-top:24px;font-size:1.2rem;}
+  .muted{color:#666;font-size:.9rem;}
+  .mode-select{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0;}
+  .mode-select label{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;border:1px solid #ddd;background:#fff;cursor:pointer;}
+  .mode-select input{accent-color:#0070f3;}
+  table{width:100%;border-collapse:collapse;margin:12px 0 22px;background:#fff;font-size:0.9rem;}
+  th,td{border:1px solid #e5e5e5;padding:6px 8px;vertical-align:top;}
+  th{background:#f3f3f3;text-align:left;}
+  td.center{text-align:center;}
+  tr.london{background:#f9fcff;}
+  tr.route{background:#fff;}
+  .badge{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.75rem;border:1px solid #ddd;}
+  .badge-london{background:#e8f2ff;border-color:#b6d1ff;}
+  .badge-route{background:#e9fcef;border-color:#b8e6c5;}
+  .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px;}
+  .card{background:#fff;border:1px solid #e5e5e5;border-radius:8px;padding:10px 12px;}
+  .card h3{margin:4px 0;font-size:1.1rem;}
+  .foot{font-size:.8rem;color:#777;margin-top:16px;}
+</style>
+</head>
+<body>
+
+<h1>Comparador de viaje: Auto vs Híbrido vs Trenes</h1>
+<p class="muted">
+  Viaje de referencia: <strong>7 días Londres</strong> + <strong>12 días Europa</strong> (Bélgica, Holanda, norte de Francia y oeste de Alemania).<br>
+  Presupuesto de la <strong>pareja de Buenos Aires</strong>, sin alojamiento (ya está cubierto).<br>
+  Cambiá el modo de transporte para ver cómo afectan los costos.
+</p>
+
+<div class="mode-select">
+  <label>
+    <input type="radio" name="mode" value="auto" checked>
+    🚗 Solo auto
+  </label>
+  <label>
+    <input type="radio" name="mode" value="hibrido">
+    🔁 Híbrido (Eurostar + auto)
+  </label>
+  <label>
+    <input type="radio" name="mode" value="trenes">
+    🚆 Solo trenes
+  </label>
+</div>
+<p class="muted" id="modeDesc"></p>
+
+<h2>Resumen de costes (pareja de Buenos Aires)</h2>
+<div class="summary-grid">
+  <div class="card">
+    <div class="badge">✈️ Vuelos intercontinentales</div>
+    <h3 id="sumFlights">–</h3>
+    <p class="muted">Pasajes Buenos Aires ⇄ Londres (ya pagados).</p>
+  </div>
+  <div class="card">
+    <div class="badge badge-london">🇬🇧 Semana en Londres</div>
+    <h3 id="sumLondon">–</h3>
+    <p class="muted">Comidas, transporte urbano y actividades (7 días, sin alojamiento).</p>
+  </div>
+  <div class="card">
+    <div class="badge badge-route">🌍 Ruta Europa (12 días)</div>
+    <h3 id="sumRoute">–</h3>
+    <p class="muted">Comidas, ocio y transporte según modo elegido.</p>
+  </div>
+  <div class="card">
+    <div class="badge">💰 Total viaje pareja</div>
+    <h3 id="sumTotal">–</h3>
+    <p class="muted">Incluye vuelos + Londres + ruta completa.</p>
+  </div>
+</div>
+
+<h2>Detalle día por día</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Día</th>
+      <th>Ciudad / Etapa</th>
+      <th>Tipo</th>
+      <th>Km aprox</th>
+      <th>Transporte</th>
+      <th>Costo base (comidas + ocio)</th>
+      <th>Costo transporte día</th>
+      <th>Total día</th>
+      <th>Notas</th>
+    </tr>
+  </thead>
+  <tbody id="tbodyDays"></tbody>
+</table>
+
+<div class="foot">
+  Valores aproximados en USD para la <strong>pareja</strong>, sin alojamiento (ya está cubierto).<br>
+  El modo <em>Híbrido</em> combina Eurostar para cruzar el Canal de la Mancha y auto para la ruta por Europa.
+</div>
+
+<script>
+(function(){
+  // Datos base del viaje: 7 días Londres + 12 días ruta
+  // type: "london" o "route" para cálculo de costes.
+  const days = [
+    {day:1, city:"Londres",          type:"london", activity:"Centro clásico (Westminster, South Bank)", km:null, notes:"Adaptación, paseo suave."},
+    {day:2, city:"Londres",          type:"london", activity:"Museos y parques (Natural History, Hyde Park)", km:null, notes:"Día indoor y cochecito."},
+    {day:3, city:"Londres",          type:"london", activity:"Tower of London, Tower Bridge", km:null, notes:"Turnarse para entrar si hace falta."},
+    {day:4, city:"Londres",          type:"london", activity:"Mercados (Borough, Camden u otros)", km:null, notes:"Comida callejera, día flexible."},
+    {day:5, city:"Londres",          type:"london", activity:"Greenwich y río", km:null, notes:"Barco / DLR, parque con vistas."},
+    {day:6, city:"Londres",          type:"london", activity:"Compras y cafés", km:null, notes:"Día libre para compras."},
+    {day:7, city:"Londres",          type:"london", activity:"Día tranquilo + preparar salida", km:null, notes:"Revisar billetes y equipaje."},
+
+    {day:8, city:"Londres → Bruselas", type:"route", activity:"Eurostar + llegada a Bruselas", km:350, notes:"Cruce del Canal, check-in, paseo Grand Place."},
+    {day:9, city:"Brujas (desde Bruselas)", type:"route", activity:"Visita de Brujas", km:200, notes:"Ida y vuelta, canales y casco histórico."},
+    {day:10, city:"Gante (desde Bruselas)", type:"route", activity:"Visita de Gante", km:120, notes:"Castillo, Graslei, cafés."},
+    {day:11, city:"Amberes → Holanda (Rotterdam)", type:"route", activity:"Amberes y salida a Holanda", km:200, notes:"Moda y arquitectura moderna."},
+    {day:12, city:"Rotterdam",       type:"route", activity:"Ciudad moderna, Markthal, Cube Houses", km:30, notes:"Día más urbano, indoor-friendly."},
+    {day:13, city:"Ámsterdam",       type:"route", activity:"Canales y museos", km:80, notes:"Paseo en barco, museos principales."},
+    {day:14, city:"Utrecht",         type:"route", activity:"Centro histórico y canales", km:80, notes:"Más tranquilo que Ámsterdam."},
+    {day:15, city:"Lille (norte de Francia)", type:"route", activity:"Visita de Lille", km:250, notes:"Arquitectura francesa, buenos cafés."},
+    {day:16, city:"Aachen (Alemania)", type:"route", activity:"Catedral y casco histórico", km:220, notes:"Cultura alemana + historia."},
+    {day:17, city:"Colonia",         type:"route", activity:"Catedral y paseo por el Rin", km:80, notes:"Vistas al río, museos."},
+    {day:18, city:"Düsseldorf",      type:"route", activity:"Ciudad y compras", km:60, notes:"Königsallee, paseo ribera."},
+    {day:19, city:"Vuelta a Londres", type:"route", activity:"Vuelo o tren de regreso a Londres", km:350, notes:"Cierre del viaje."}
+  ];
+
+  // Costes base (sin transporte) por tipo de día
+  const baseCosts = {
+    london: 170, // comidas + metro + ocio (pareja)
+    route: 120   // comidas + ocio (sin transporte, pareja)
+  };
+
+  // Modos de transporte
+  const modes = {
+    auto: {
+      label: "Solo auto",
+      desc: "Todo el tramo continental se hace en SUV (Bruselas, Bélgica, Holanda, norte Francia y oeste Alemania). Cruce a Europa continental en ferry o tren+auto, simplificado aquí.",
+      // Coste de transporte por día según tipo de día (USD, pareja)
+      perDay: {
+        london: 30,   // transporte local en Londres
+        route: 60     // combustible, peajes, prorrateo del alquiler SUV
+      },
+      // Extra global para este modo (p.ej. ajustes, ferries)
+      extraRoute: 0
+    },
+    hibrido: {
+      label: "Híbrido (Eurostar + auto)",
+      desc: "Cruce Londres–Bruselas en Eurostar y ruta por Europa en SUV compartida. Es la opción más cómoda y barata para ustedes.",
+      perDay: {
+        london: 30,
+        route: 40      // SUV más amortizada y Eurostar ya contemplado
+      },
+      extraRoute: 350   // Eurostar ida/vuelta para la pareja aproximado
+    },
+    trenes: {
+      label: "Solo trenes",
+      desc: "Todos los tramos Londres–Europa y dentro del continente se hacen en tren. Muy cómodo pero algo más caro para esta ruta.",
+      perDay: {
+        london: 30,
+        route: 70       // trenes interurbanos diarios (pareja)
+      },
+      extraRoute: 0
+    }
+  };
+
+  const FLIGHTS = 3862; // USD, pareja
+  const LONDON_DAYS = days.filter(d => d.type === "london").length;
+
+  const tbody = document.getElementById("tbodyDays");
+  const sumFlightsEl = document.getElementById("sumFlights");
+  const sumLondonEl = document.getElementById("sumLondon");
+  const sumRouteEl = document.getElementById("sumRoute");
+  const sumTotalEl = document.getElementById("sumTotal");
+  const modeDescEl = document.getElementById("modeDesc");
+
+  function formatUSD(x){
+    return "$" + x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  function render(modeKey){
+    const mode = modes[modeKey];
+    modeDescEl.textContent = mode.desc;
+
+    tbody.innerHTML = "";
+    let routeTotal = 0;
+    let londonTotal = 0;
+
+    days.forEach(d => {
+      const base = baseCosts[d.type];
+      const tCost = mode.perDay[d.type];
+      const totalDay = base + tCost;
+
+      if(d.type === "london") londonTotal += totalDay;
+      else routeTotal += totalDay;
+
+      const tr = document.createElement("tr");
+      tr.className = d.type === "london" ? "london" : "route";
+      const badge = d.type === "london" ? 
+        '<span class="badge badge-london">Londres</span>' : 
+        '<span class="badge badge-route">Ruta Europa</span>';
+
+      tr.innerHTML = `
+        <td class="center">${d.day}</td>
+        <td>${d.city}</td>
+        <td>${badge}</td>
+        <td>${d.km ? d.km + " km" : "—"}</td>
+        <td>${mode.label}</td>
+        <td>${formatUSD(base)}</td>
+        <td>${formatUSD(tCost)}</td>
+        <td><strong>${formatUSD(totalDay)}</strong></td>
+        <td>${d.notes || ""}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // Añadir costes extras de ruta (Eurostar, etc.)
+    const routeWithExtra = routeTotal + mode.extraRoute;
+
+    sumFlightsEl.textContent = formatUSD(FLIGHTS);
+    sumLondonEl.textContent = formatUSD(londonTotal);
+    sumRouteEl.textContent = formatUSD(routeWithExtra);
+
+    const grandTotal = FLIGHTS + londonTotal + routeWithExtra;
+    sumTotalEl.textContent = formatUSD(grandTotal);
+  }
+
+  // Manejar cambio de modo
+  document.querySelectorAll('input[name="mode"]').forEach(r => {
+    r.addEventListener("change", () => render(r.value));
+  });
+
+  // Inicial
+  render("auto");
+})();
+</script>
+
+</body>
+</html>
