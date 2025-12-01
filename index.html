@@ -1,33 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Viaje Invierno – Bélgica, Holanda y París (Auto / Híbrido / Trenes)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root{
+    --bg:#050816;
+    --card:#0c1224;
+    --border:rgba(255,255,255,.08);
+    --text:#f5f5ff;
+    --muted:#a1a6c5;
+    --accent-auto:#6fc5a6;
+    --accent-hibrido:#82b4ff;
+    --accent-tren:#f4a261;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:radial-gradient(circle at top,#151b3b 0,#050816 52%,#02020a 100%);
+    color:var(--text);
+    line-height:1.6;
+  }
+  a{color:#ffd166;text-decoration:none;}
+  header{
+    padding:22px 16px 12px;
+    background:linear-gradient(130deg,rgba(130,180,255,.25),rgba(14,20,40,1));
+    border-bottom:1px solid var(--border);
+  }
+  .container{max-width:1120px;margin:0 auto;padding:0 16px 36px;}
+  h1{margin:0 0 6px;font-size:1.9rem;}
+  h2{margin:28px 0 10px;font-size:1.4rem;border-bottom:1px solid var(--border);padding-bottom:4px;}
+  h3{margin:10px 0 6px;font-size:1.1rem;}
+  .muted{color:var(--muted);font-size:.9rem;}
+  .tagline{color:#d6dcff;font-size:.96rem;}
+
+  /* Botones modo */
+  .mode-switch{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:16px 0 8px;
+  }
+  .mode-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:rgba(3,7,30,.7);
+    font-size:.86rem;
+    cursor:pointer;
+    transition:.15s ease;
+  }
+  .mode-btn span.dot{
+    width:10px;height:10px;border-radius:999px;background:var(--border);
+  }
+  .mode-btn[data-mode="auto"].active{
+    border-color:var(--accent-auto);
+    box-shadow:0 0 0 1px rgba(111,197,166,.4);
+  }
+  .mode-btn[data-mode="auto"].active span.dot{background:var(--accent-auto);}
+  .mode-btn[data-mode="hibrido"].active{
+    border-color:var(--accent-hibrido);
+    box-shadow:0 0 0 1px rgba(130,180,255,.4);
+  }
+  .mode-btn[data-mode="hibrido"].active span.dot{background:var(--accent-hibrido);}
+  .mode-btn[data-mode="trenes"].active{
+    border-color:var(--accent-tren);
+    box-shadow:0 0 0 1px rgba(244,162,97,.4);
+  }
+  .mode-btn[data-mode="trenes"].active span.dot{background:var(--accent-tren);}
+
+  /* Grids */
+  .grid{display:grid;gap:14px;}
+  @media(min-width:880px){.grid-2{grid-template-columns:1.4fr 1fr;}}
+  @media(min-width:950px){.grid-3{grid-template-columns:repeat(3,1fr);}}
+
+  .card{
+    background:var(--card);
+    border-radius:14px;
+    border:1px solid var(--border);
+    padding:12px 12px 14px;
+  }
+
+  .pill{
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:999px;
+    font-size:.76rem;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--border);
+    margin-bottom:4px;
+  }
+
+  .summary-number{
+    font-size:1.4rem;
+    font-weight:600;
+    margin:2px 0;
+  }
+  .summary-label{
+    font-size:.8rem;
+    color:var(--muted);
+  }
+
+  /* Tabla */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:8px;
+    font-size:.86rem;
+  }
+  th,td{
+    border:1px solid rgba(255,255,255,.06);
+    padding:6px 7px;
+    vertical-align:top;
+  }
+  th{
+    background:rgba(3,10,40,.85);
+    text-align:left;
+  }
+  td.center{text-align:center;}
+  tr.london{background:rgba(112,128,255,.06);}
+  tr.route{background:rgba(20,180,140,.04);}
+  .badge{
+    display:inline-block;
+    padding:2px 6px;
+    border-radius:999px;
+    font-size:.72rem;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.03);
+    margin-right:4px;
+  }
+  .badge-london{border-color:#7f8cff;color:#cdd2ff;}
+  .badge-route{border-color:#6fc5a6;color:#c9f7e5;}
+
+  /* City cards */
+  .city-grid{display:grid;gap:14px;}
+  @media(min-width:840px){.city-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(min-width:1040px){.city-grid{grid-template-columns:repeat(3,1fr);}}
+  .city-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .city-card img{
+    width:100%;
+    height:150px;
+    object-fit:cover;
+  }
+  .city-body{padding:9px 11px 11px;}
+  .city-title{margin:4px 0 2px;font-size:1rem;}
+  .day-tag{
+    display:inline-block;
+    padding:1px 7px;
+    border-radius:999px;
+    font-size:.72rem;
+    border:1px solid var(--border);
+    margin-right:4px;
+  }
+
+  .foot{
+    font-size:.78rem;
+    color:var(--muted);
+    margin-top:16px;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>Viaje de Invierno – Bélgica, Holanda y París</h1>
+    <p class="tagline">
+      Pensado para <strong>4 adultos + 1 bebé</strong>, con alojamiento ya cubierto.  
+      Seleccioná arriba el tipo de viaje para ver los costos actualizados.
+    </p>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- SELECTOR -->
+  <section>
+    <h2>Elegí el tipo de viaje</h2>
+    <p class="muted">Cada opción recalcula los costos automáticamente.</p>
+
+    <div class="mode-switch">
+      <button class="mode-btn" data-mode="auto"><span class="dot"></span> 🚗 Solo auto</button>
+      <button class="mode-btn" data-mode="hibrido"><span class="dot"></span> 🔁 Híbrido (Eurostar + auto)</button>
+      <button class="mode-btn" data-mode="trenes"><span class="dot"></span> 🚆 Solo trenes</button>
+    </div>
+
+    <p id="modeDesc" class="muted"></p>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <span class="pill">✈️ Vuelos</span>
+        <div class="summary-number" id="sumFlights">–</div>
+        <div class="summary-label">BsAs ⇄ Londres (ya pagados)</div>
+      </div>
+      <div class="card">
+        <span class="pill">🇬🇧 Londres (7 días)</span>
+        <div class="summary-number" id="sumLondon">–</div>
+        <div class="summary-label">Comidas + transporte + actividades</div>
+      </div>
+      <div class="card">
+        <span class="pill">🌍 Ruta Europa (12 días)</span>
+        <div class="summary-number" id="sumRoute">–</div>
+        <div class="summary-label">Depende del tipo de viaje</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;">
+      <span class="pill" id="pillMode">Tipo de viaje seleccionado</span>
+      <div class="summary-number" id="sumTotal">–</div>
+      <div class="summary-label">Total viaje completo</div>
+      <p class="muted" id="modeNote"></p>
+    </div>
+  </section>
+
+  <!-- TABLA -->
+  <section>
+    <h2>Tabla del viaje día por día</h2>
+    <p class="muted">El itinerario es fijo, los costos cambian según el modo de transporte.</p>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Día</th>
+            <th>Ciudad</th>
+            <th>Tipo</th>
+            <th>Km</th>
+            <th>Transporte</th>
+            <th>Base</th>
+            <th>Transporte día</th>
+            <th>Total Día</th>
+          </tr>
+        </thead>
+        <tbody id="tbodyDays"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- IMÁGENES ACESIBLES -->
+  <section>
+    <h2>Itinerario visual (imágenes accesibles)</h2>
+    <p class="muted">Todas las imágenes provienen de Unsplash Source (siempre disponibles).</p>
+
+    <div class="city-grid">
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?brussels,belgium" alt="Bruselas">
+        <div class="city-body">
+          <span class="day-tag">Día 1</span>
+          <h3 class="city-title">Bruselas</h3>
+          <p class="muted">Base inicial, ciudad perfecta para invierno.</p>
+        </div>
+      </div>
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?bruges,belgium" alt="Brujas">
+        <div class="city-body">
+          <span class="day-tag">Día 2</span>
+          <h3 class="city-title">Brujas</h3>
+          <p class="muted">Postal medieval, canales y Markt.</p>
+        </div>
+      </div>
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?ghent,belgium" alt="Gante">
+        <div class="city-body">
+          <span class="day-tag">Día 3</span>
+          <h3 class="city-title">Gante</h3>
+          <p class="muted">Castillo de los Condes y Graslei.</p>
+        </div>
+      </div>
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?antwerp,belgium" alt="Amberes">
+        <div class="city-body">
+          <span class="day-tag">Día 4</span>
+          <h3 class="city-title">Amberes</h3>
+          <p class="muted">Moda, cafés y arquitectura.</p>
+        </div>
+      </div>
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?namur,belgium" alt="Namur">
+        <div class="city-body">
+          <span class="day-tag">Día 5</span>
+          <h3 class="city-title">Namur</h3>
+          <p class="muted">Ciudadela y vistas al Mosa.</p>
+        </div>
+      </div>
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?dinant,belgium" alt="Dinant">
+        <div class="city-body">
+          <span class="day-tag">Día 6</span>
+          <h3 class="city-title">Dinant</h3>
+          <p class="muted">Río, iglesia negra y fortaleza.</p>
+        </div>
+      </div>
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?paris,france" alt="París">
+        <div class="city-body">
+          <span class="day-tag">Día 7–9</span>
+          <h3 class="city-title">París</h3>
+          <p class="muted">Museos, cafés y paseos clásicos.</p>
+        </div>
+      </div>
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?haarlem,netherlands" alt="Haarlem">
+        <div class="city-body">
+          <span class="day-tag">Día 10</span>
+          <h3 class="city-title">Haarlem</h3>
+          <p class="muted">Mini Ámsterdam tranquila.</p>
+        </div>
+      </div>
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?amsterdam,netherlands" alt="Ámsterdam">
+        <div class="city-body">
+          <span class="day-tag">Día 11</span>
+          <h3 class="city-title">Ámsterdam</h3>
+          <p class="muted">Canales, museos y barco cubierto.</p>
+        </div>
+      </div>
+
+      <div class="city-card">
+        <img src="https://source.unsplash.com/featured/?denbosch,netherlands" alt="Den Bosch">
+        <div class="city-body">
+          <span class="day-tag">Día 12</span>
+          <h3 class="city-title">Den Bosch</h3>
+          <p class="muted">Final relajado en ciudad medieval.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
 <script>
 (function(){
-  // --------- COSTOS BASE ---------
-  const FLIGHTS = 3862;        // USD – vuelos BsAs ⇄ Londres
-  const LONDON = 1190;         // 7 días comidas + transporte + ocio
-  const BASE_ROUTE = 1440;     // 12 días comidas + ocio (sin transporte)
+  const FLIGHTS = 3862;
+  const LONDON = 1190;
+  const BASE_ROUTE = 1440;
 
-  // --------- MODOS DE VIAJE ---------
   const modes = {
-    auto: {
-      label: "🚗 Solo auto",
-      desc: "Todo el tramo continental en SUV. Máxima flexibilidad, muy cómodo con bebé, pero cuidado con estacionamientos.",
-      routeTransport: 1150, // total 12 días
-      note: "Viaje completo ≈ 7.6k USD. Ideal si quieren total independencia."
+    auto:{
+      label:"🚗 Solo auto",
+      desc:"Todo el tramo continental en SUV. Súper flexible y cómodo.",
+      routeTransport:1150,
+      note:"Total viaje ≈ 7.6k USD."
     },
-    hibrido: {
-      label: "🔁 Híbrido (Eurostar + auto)",
-      desc: "Cruce Londres–Bruselas en Eurostar y luego SUV para la ruta. La opción más equilibrada, cómoda y económica.",
-      routeTransport: 950,
-      note: "Viaje completo ≈ 7.4k USD. RECOMENDADO: menos estrés, más rápido, mejor con bebé."
+    hibrido:{
+      label:"🔁 Híbrido (Eurostar + auto)",
+      desc:"Cruce Londres–Bruselas en Eurostar + SUV. Mejor equilibrio.",
+      routeTransport:950,
+      note:"Total viaje ≈ 7.4k USD (RECOMENDADO)."
     },
-    trenes: {
-      label: "🚆 Solo trenes",
-      desc: "Todo en trenes europeos. Muy cómodo pero un poco más caro y más transbordos con cochecito.",
-      routeTransport: 1300,
-      note: "Viaje completo ≈ 7.8k USD. Buen confort, pero menos flexible."
+    trenes:{
+      label:"🚆 Solo trenes",
+      desc:"Todo en trenes europeos. Más caro y más transbordos.",
+      routeTransport:1300,
+      note:"Total viaje ≈ 7.8k USD."
     }
   };
 
-  // --------- DÍAS DEL VIAJE ---------
   const days = [
     {day:1, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
     {day:2, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
@@ -38,20 +389,19 @@
     {day:7, city:"Londres", type:"london", base:170, km:null, transportLabel:"Metro / a pie"},
 
     {day:8, city:"Londres → Bruselas", type:"route", base:120, km:350, transportLabel:"Cruce a Bruselas"},
-    {day:9, city:"Brujas (desde Bruselas)", type:"route", base:120, km:200, transportLabel:"Bruselas ↔ Brujas"},
-    {day:10, city:"Gante (desde Bruselas)", type:"route", base:120, km:120, transportLabel:"Bruselas ↔ Gante"},
+    {day:9, city:"Brujas", type:"route", base:120, km:200, transportLabel:"Bruselas ↔ Brujas"},
+    {day:10, city:"Gante", type:"route", base:120, km:120, transportLabel:"Bruselas ↔ Gante"},
     {day:11, city:"Amberes", type:"route", base:120, km:120, transportLabel:"Bruselas → Amberes"},
     {day:12, city:"Namur", type:"route", base:120, km:70, transportLabel:"Amberes → Namur"},
     {day:13, city:"Dinant", type:"route", base:120, km:60, transportLabel:"Namur → Dinant"},
     {day:14, city:"París (llegada)", type:"route", base:120, km:300, transportLabel:"Dinant/Namur → París"},
-    {day:15, city:"París (museos)", type:"route", base:120, km:40, transportLabel:"Desplazamientos urbanos"},
+    {day:15, city:"París (museos)", type:"route", base:120, km:40, transportLabel:"Movimientos urbanos"},
     {day:16, city:"Haarlem", type:"route", base:120, km:500, transportLabel:"París → Holanda"},
     {day:17, city:"Ámsterdam", type:"route", base:120, km:30, transportLabel:"Haarlem → Ámsterdam"},
     {day:18, city:"Den Bosch", type:"route", base:120, km:100, transportLabel:"Ámsterdam → Den Bosch"},
-    {day:19, city:"Regreso a Londres / aeropuerto", type:"route", base:120, km:350, transportLabel:"Holanda → Bruselas / aeropuerto"}
+    {day:19, city:"Regreso", type:"route", base:120, km:350, transportLabel:"Holanda → Bruselas / aeropuerto"}
   ];
 
-  // --------- SELECTORES DEL DOM ---------
   const tbody = document.getElementById("tbodyDays");
   const modeDesc = document.getElementById("modeDesc");
   const sumFlightsEl = document.getElementById("sumFlights");
@@ -61,21 +411,15 @@
   const modeNoteEl = document.getElementById("modeNote");
   const pillModeEl = document.getElementById("pillMode");
 
-  // --------- FORMATEADOR USD ---------
-  function fmt(x){
-    return "$" + x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,",");
-  }
+  function fmt(x){ return "$" + x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,","); }
 
-  // --------- FUNCIÓN PRINCIPAL DE RENDER ---------
   function render(modeKey){
     const mode = modes[modeKey];
-    const perDayRouteTransport = mode.routeTransport / 12; // 12 días de ruta
+    const perDayRouteTransport = mode.routeTransport / 12;
 
-    // --- RESUMEN GLOBAL ---
     const routeTotal = BASE_ROUTE + mode.routeTransport;
     const totalTrip = FLIGHTS + LONDON + routeTotal;
 
-    // Insertar resumen
     sumFlightsEl.textContent = fmt(FLIGHTS);
     sumLondonEl.textContent = fmt(LONDON);
     sumRouteEl.textContent = fmt(routeTotal);
@@ -85,52 +429,43 @@
     modeNoteEl.textContent = mode.note;
     pillModeEl.textContent = "Tipo de viaje seleccionado: " + mode.label;
 
-    // --- TABLA DÍA POR DÍA ---
     tbody.innerHTML = "";
-    days.forEach(d => {
+
+    days.forEach(d=>{
       const tr = document.createElement("tr");
       tr.className = d.type === "london" ? "london" : "route";
 
-      let tTransport = 0;
-
-      if(d.type === "london"){
-        tTransport = 30;   // transporte urbano Londres
-      } else {
-        tTransport = perDayRouteTransport;
-      }
-
-      const tDay = d.base + tTransport;
+      let tTransport = d.type==="london" ? 30 : perDayRouteTransport;
+      let tDay = d.base + tTransport;
 
       tr.innerHTML = `
         <td class="center">${d.day}</td>
         <td>${d.city}</td>
-        <td>${d.type === "london"
-            ? '<span class="badge badge-london">Londres</span>'
-            : '<span class="badge badge-route">Ruta Europa</span>'}</td>
-        <td>${d.km ? d.km + ' km' : '—'}</td>
+        <td>${d.type==="london"
+             ? '<span class="badge badge-london">Londres</span>'
+             : '<span class="badge badge-route">Ruta Europa</span>'}</td>
+        <td>${d.km ? d.km + " km" : "—"}</td>
         <td>${mode.label}</td>
         <td>${fmt(d.base)}</td>
         <td>${fmt(tTransport)}</td>
         <td><strong>${fmt(tDay)}</strong></td>
       `;
+
       tbody.appendChild(tr);
     });
 
-    // --- ACTUALIZAR ESTADO VISUAL DE BOTONES ---
     document.querySelectorAll(".mode-btn").forEach(btn=>{
       btn.classList.toggle("active", btn.dataset.mode === modeKey);
     });
   }
 
-  // --------- EVENTOS DE BOTONES ---------
   document.querySelectorAll(".mode-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      render(btn.dataset.mode);
-    });
+    btn.addEventListener("click",()=> render(btn.dataset.mode));
   });
 
-  // --------- ESTADO INICIAL ---------
   render("hibrido");
-
 })();
 </script>
+
+</body>
+</html>
